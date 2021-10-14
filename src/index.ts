@@ -8,7 +8,7 @@ export interface WorkerWrapperOptions {
 }
 
 export const handleEvent = async (event: FetchEvent, app: App, opts?: WorkerWrapperOptions): Promise<Response> => {
-  const handle = useBase(opts?.basePath || '/', app) as unknown as Handle
+  const handle = useBase(opts?.basePath || '', app) as unknown as Handle
   const localCall = createCall(handle)
   const url = new URL(event.request.url)
 
