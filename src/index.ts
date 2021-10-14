@@ -17,7 +17,7 @@ export const handleEvent = async (event: FetchEvent, app: App, opts?: WorkerWrap
 
   const r = await localCall({
     event,
-    url: url.toString(),
+    url: url.pathname + url.search,
     host: url.hostname,
     protocol: url.protocol,
     headers: clonedHeaders,
