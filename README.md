@@ -17,13 +17,17 @@ yarn add h3-worker
 
 - Set up your Cloudflare worker project - I recommend [worker-typescript-template](https://github.com/cloudflare/worker-typescript-template)
 - Check out the [h3](https://github.com/unjs/h3) docs
-- Write some routes and use the `handleEvent` method from `h3-worker` to `respondWith`:
+- Write some routes and use the `handleEvent` method from `h3-worker` to `respondWith`
+
+** Note that you need to put the most specific routes first
 
 ```ts
 import { createApp } from 'h3'
 import { handleEvent } from 'h3-worker'
 
 const app = createApp()
+
+app.use('/json', () => ({ hello: 'JSON' }))
 app.use('/', () => 'Hello world')
 
 addEventListener('fetch', (event) => {
