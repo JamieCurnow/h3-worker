@@ -13,8 +13,7 @@
     "build": "tsc -d",
     "watch": "tsc --watch -d",
     "dev": "tsc --watch -d",
-    "test": "yarn build",
-    "lint": "eslint --ext ts ."
+    "test": "tsc -d"
   },
   "dependencies": {
     "h3": "^0.3.1",
