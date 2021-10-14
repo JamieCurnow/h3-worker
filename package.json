@@ -1,0 +1,31 @@
+{
+  "name": "h3-worker",
+  "version": "0.0.1",
+  "description": "Use h3 in a (Cloudflare) worker",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "src/index.js",
+  "repository": "https://github.com/JamieCurnow/h3-worker.git",
+  "author": "Jamie Curnow <jamie@island-web.ca>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc -d",
+    "watch": "tsc --watch -d",
+    "dev": "tsc --watch -d",
+    "test": "yarn lint",
+    "lint": "eslint --ext ts ."
+  },
+  "dependencies": {
+    "h3": "^0.3.1",
+    "unenv": "^0.3.10"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "^6.0.1",
+    "@types/node": "^16.10.9",
+    "eslint": "^8.0.1",
+    "ts-node": "^10.3.0",
+    "typescript": "^4.4.4",
+    "ufo": "^0.7.9"
+  }
+}
