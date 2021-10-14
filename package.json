@@ -9,6 +9,12 @@
   "author": "Jamie Curnow <jamie@island-web.ca>",
   "license": "MIT",
   "private": false,
+  "keywords": [
+    "cloudflare",
+    "worker",
+    "h3",
+    "api"
+  ],
   "scripts": {
     "build": "tsc -d",
     "watch": "tsc --watch -d",
