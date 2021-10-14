@@ -12,22 +12,21 @@ export const handleEvent = async (event: FetchEvent, app: App, opts?: WorkerWrap
   const localCall = createCall(handle)
   const url = new URL(event.request.url)
 
-  const clonedHeaders: { [key: string]: string | string[] } = {}
-  event.request.headers.forEach((v, k) => clonedHeaders[k] = v)
-
   const r = await localCall({
     event,
     url: url.pathname + url.search,
     host: url.hostname,
     protocol: url.protocol,
-    headers: clonedHeaders,
+    // @ts-ignore
+    headers: event.request.headers,
     method: event.request.method,
     redirect: event.request.redirect,
     body: event.request.body
   })
 
   return new Response(r.body, {
-    headers: r.headers as HeadersInit,
+    // @ts-ignore
+    headers: r.headers,
     status: r.status,
     statusText: r.statusText
   })
