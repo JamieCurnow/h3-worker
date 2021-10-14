@@ -13,7 +13,7 @@
     "build": "tsc -d",
     "watch": "tsc --watch -d",
     "dev": "tsc --watch -d",
-    "test": "yarn lint",
+    "test": "yarn build",
     "lint": "eslint --ext ts ."
   },
   "dependencies": {
@@ -21,9 +21,7 @@
     "unenv": "^0.3.10"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@types/node": "^16.10.9",
-    "eslint": "^8.0.1",
     "ts-node": "^10.3.0",
     "typescript": "^4.4.4",
     "ufo": "^0.7.9"
