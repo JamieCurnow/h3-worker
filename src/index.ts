@@ -1,7 +1,8 @@
 import { App, useBase } from 'h3'
 import { createCall } from 'unenv/runtime/fetch/index'
 import { Handle } from 'unenv/runtime/fetch/call'
-export { IncomingMessage } from 'unenv/runtime/node/http'
+import { requestHasBody, useRequestBody } from './utils/body'
+export { IncomingMessage, ServerResponse } from 'unenv/runtime/node/http'
 
 export interface WorkerWrapperOptions {
   // The base path for the app - defaults to '/'
@@ -13,6 +14,11 @@ export const handleEvent = async (event: FetchEvent, app: App, opts?: WorkerWrap
   const localCall = createCall(handle)
   const url = new URL(event.request.url)
 
+  let body
+  if (requestHasBody(event.request)) {
+    body = await useRequestBody(event.request)
+  }
+
   const r = await localCall({
     event,
     url: url.pathname + url.search,
@@ -22,7 +28,7 @@ export const handleEvent = async (event: FetchEvent, app: App, opts?: WorkerWrap
     headers: event.request.headers,
     method: event.request.method,
     redirect: event.request.redirect,
-    body: event.request.body
+    body
   })
 
   return new Response(r.body, {
