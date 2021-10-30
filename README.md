@@ -1,4 +1,4 @@
-# h3-worker (WIP - not fit for production)
+# h3-worker
 Use [h3](https://github.com/unjs/h3) in a ([Cloudflare](https://developers.cloudflare.com/workers/)) worker!
 
 This little package uses some helpers from [h3](https://github.com/unjs/h3) and [unenv](https://github.com/unjs/unenv) to make h3 apps work in a Cloudflare worker environment.
