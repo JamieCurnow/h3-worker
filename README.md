@@ -19,17 +19,25 @@ yarn add h3-worker
 - Check out the [h3](https://github.com/unjs/h3) docs
 - Write some routes and use the `handleEvent` method from `h3-worker` to `respondWith`
 
-** Note that you need to put the most specific routes first
-
 ```ts
 import { createApp, handleEvent } from 'h3-worker'
 
+// Create the app
 const app = createApp()
 
+// Add some routes (no need to worry about order)
 app.use('/', () => 'Hello world')
 app.use('/json', () => ({ hello: 'JSON' }))
 
+// Type the body if you like
+app.use<{ firstName: string }>('/first-name', (req) => {
+  const { body } = req
+  return `Hi ${body.firstName}`
+})
+
+// Add the event listener
 addEventListener('fetch', (event) => {
+  // Respond with a handleEvent() call, passing in the event and your app. Options are optional
   event.respondWith(handleEvent(event, app, { basePath: '', sortStack: true }))
 })
 ```
