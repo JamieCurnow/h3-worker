@@ -1,6 +1,6 @@
 {
   "name": "h3-worker",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Use h3 in a (Cloudflare) worker",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
