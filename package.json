@@ -22,13 +22,13 @@
     "test": "tsc -d"
   },
   "dependencies": {
-    "h3": "^0.3.1",
-    "unenv": "^0.3.10"
+    "h3": "latest",
+    "unenv": "latest"
   },
   "devDependencies": {
-    "@types/node": "^16.10.9",
-    "ts-node": "^10.3.0",
-    "typescript": "^4.4.4",
-    "ufo": "^0.7.9"
+    "@types/node": "latest",
+    "ts-node": "latest",
+    "typescript": "latest",
+    "ufo": "latest"
   }
 }
