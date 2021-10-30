@@ -1,15 +1,19 @@
 import { AppOptions, createApp as _createApp, Stack } from 'h3'
-import { IncomingMessage } from 'unenv/runtime/node/http/request'
+import { IncomingMessage as _IncomingMessage } from 'unenv/runtime/node/http/request'
 import { ServerResponse } from 'unenv/runtime/node/http/response'
 
+interface IncomingMessage<Body = any> extends _IncomingMessage {
+  body: Body
+}
+
 interface WorkerApp {
-  (req: IncomingMessage, res: ServerResponse): Promise<any>
+  <Body>(req: IncomingMessage<Body>, res: ServerResponse): Promise<any>
   stack: Stack
   _handle: WorkerPHandle
   use: WorkerAppUse
 }
 
-type WorerMiddleware = (req: IncomingMessage, res: ServerResponse, next: (err?: Error) => any) => any
+type WorkerMiddleware<Body = any> = (req: IncomingMessage<Body>, res: ServerResponse, next: (err?: Error) => any) => any
 
 interface WorkerInputLayer {
   route?: string
@@ -25,14 +29,14 @@ declare type WorkerMatcher = (url: string, req?: IncomingMessage) => boolean
 
 
 interface WorkerAppUse {
-  (route: string | string[], handle: WorerMiddleware | WorerMiddleware[], options?: Partial<WorkerInputLayer>): WorkerApp
-  (route: string | string[], handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
-  (handle: WorerMiddleware | WorerMiddleware[], options?: Partial<WorkerInputLayer>): WorkerApp
-  (handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(route: string | string[], handle: WorkerMiddleware<Body> | WorkerMiddleware<Body>[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(route: string | string[], handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(handle: WorkerMiddleware<Body> | WorkerMiddleware<Body>[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
   (options: WorkerInputLayer): WorkerApp
 }
 
-type WorkerHandle<T = any> = (req: IncomingMessage, res: ServerResponse) => T
+type WorkerHandle<T = any> = (req: IncomingMessage<T>, res: ServerResponse) => T
 type WorkerPHandle = WorkerHandle<Promise<any>>
 
 /** Create the H3 app with types specifically for Cloudflare Worker environments */
