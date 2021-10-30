@@ -1,6 +1,6 @@
 import { App, useBase } from 'h3'
 import { createCall } from 'unenv/runtime/fetch/index'
-import { Handle } from 'unenv/runtime/fetch/call'
+import type { Handle } from 'unenv/runtime/fetch/call'
 import { requestHasBody, useRequestBody } from './utils/body'
 
 export interface WorkerWrapperOptions {

@@ -22,8 +22,8 @@
     "test": "tsc -d"
   },
   "dependencies": {
-    "h3": "latest",
-    "unenv": "latest"
+    "h3": "^0.3.1",
+    "unenv": "^0.3.10"
   },
   "devDependencies": {
     "@types/node": "latest",
