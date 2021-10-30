@@ -1,6 +1,7 @@
 import { App, useBase } from 'h3'
 import { createCall } from 'unenv/runtime/fetch/index'
 import { Handle } from 'unenv/runtime/fetch/call'
+export { IncomingMessage } from 'unenv/runtime/node/http'
 
 export interface WorkerWrapperOptions {
   // The base path for the app - defaults to '/'
