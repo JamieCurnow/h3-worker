@@ -1,5 +1,4 @@
 const METHOD_WITH_BODY_RE = /post|put|patch/i
-const TEXT_MIME_RE = /application\/text|text\/html/
 const JSON_MIME_RE = /application\/json/
 
 export function requestHasBody(request: Request): boolean {
@@ -17,10 +16,9 @@ export async function useRequestBody(request: Request): Promise<any> {
     return body
   } else if (JSON_MIME_RE.test(contentType)) {
     return request.json()
-  } else if (TEXT_MIME_RE.test(contentType)) {
+  } else if (contentType.includes('text')) {
     return request.text()
   } else {
-    const blob = await request.blob()
-    return URL.createObjectURL(blob)
+    return request.blob()
   }
 }
