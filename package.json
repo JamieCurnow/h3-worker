@@ -22,7 +22,7 @@
     "test": "tsc -d"
   },
   "dependencies": {
-    "h3": "^0.3.1",
+    "h3": "^0.3.3",
     "unenv": "^0.3.10"
   },
   "devDependencies": {

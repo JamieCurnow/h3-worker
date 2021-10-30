@@ -1,39 +1,48 @@
-import { App, useBase } from 'h3'
-import { createCall } from 'unenv/runtime/fetch/index'
-import type { Handle } from 'unenv/runtime/fetch/call'
-import { requestHasBody, useRequestBody } from './utils/body'
+import { Stack } from 'h3'
+import { IncomingMessage } from 'unenv/runtime/node/http/request'
+import { ServerResponse } from 'unenv/runtime/node/http/response'
+import { sortStack } from './sortStack'
 
 export interface WorkerWrapperOptions {
-  // The base path for the app - defaults to '/'
+  /** The base path for the app - defaults to '/' */
   basePath?: string
+  /** Sort the h3 route stack by length to avoid ordering issues */
+  sortStack?: boolean
 }
 
-export const handleEvent = async (event: FetchEvent, app: App, opts?: WorkerWrapperOptions): Promise<Response> => {
-  const handle = useBase(opts?.basePath || '', app) as unknown as Handle
-  const localCall = createCall(handle)
-  const url = new URL(event.request.url)
-
-  let body
-  if (requestHasBody(event.request)) {
-    body = await useRequestBody(event.request)
-  }
-
-  const r = await localCall({
-    event,
-    url: url.pathname + url.search,
-    host: url.hostname,
-    protocol: url.protocol,
-    // @ts-ignore
-    headers: event.request.headers,
-    method: event.request.method,
-    redirect: event.request.redirect,
-    body
-  })
-
-  return new Response(r.body, {
-    // @ts-ignore
-    headers: r.headers,
-    status: r.status,
-    statusText: r.statusText
-  })
+export interface WorkerApp {
+  (req: IncomingMessage, res: ServerResponse): Promise<any>
+  stack: Stack
+  _handle: WorkerPHandle
+  use: WorkerAppUse
 }
+
+export type WorerMiddleware = (req: IncomingMessage, res: ServerResponse, next: (err?: Error) => any) => any
+
+export interface WorkerInputLayer {
+  route?: string
+  match?: WorkerMatcher
+  handle: WorkerHandle | WorkerLazyHandle
+  lazy?: boolean
+  promisify?: boolean
+}
+
+export declare type WorkerLazyHandle = () => WorkerHandle | Promise<WorkerHandle>
+
+export declare type WorkerMatcher = (url: string, req?: IncomingMessage) => boolean
+
+
+export interface WorkerAppUse {
+  (route: string | string[], handle: WorerMiddleware | WorerMiddleware[], options?: Partial<WorkerInputLayer>): WorkerApp
+  (route: string | string[], handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
+  (handle: WorerMiddleware | WorerMiddleware[], options?: Partial<WorkerInputLayer>): WorkerApp
+  (handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
+  (options: WorkerInputLayer): WorkerApp
+}
+
+export type WorkerHandle<T = any> = (req: IncomingMessage, res: ServerResponse) => T
+export type WorkerPHandle = WorkerHandle<Promise<any>>
+
+export { handleEvent } from './handleEvent'
+export { createApp } from './createApp'
+export { sortStack } from './sortStack'

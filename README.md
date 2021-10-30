@@ -1,7 +1,7 @@
 # h3-worker (WIP - not fit for production)
 Use [h3](https://github.com/unjs/h3) in a ([Cloudflare](https://developers.cloudflare.com/workers/)) worker!
 
-This little package uses some helpers from [h3](https://github.com/unjs/h3) and [unenv](https://github.com/unjs/unenv) to make h3 apps work in a Cloudflare (or maybe any) worker environment.
+This little package uses some helpers from [h3](https://github.com/unjs/h3) and [unenv](https://github.com/unjs/unenv) to make h3 apps work in a Cloudflare worker environment.
 
 ## Install
 
@@ -22,16 +22,15 @@ yarn add h3-worker
 ** Note that you need to put the most specific routes first
 
 ```ts
-import { createApp } from 'h3'
-import { handleEvent } from 'h3-worker'
+import { createApp, handleEvent } from 'h3-worker'
 
 const app = createApp()
 
-app.use('/json', () => ({ hello: 'JSON' }))
 app.use('/', () => 'Hello world')
+app.use('/json', () => ({ hello: 'JSON' }))
 
 addEventListener('fetch', (event) => {
-  event.respondWith(handleEvent(event, app))
+  event.respondWith(handleEvent(event, app, { basePath: '', sortStack: true }))
 })
 ```
 
