@@ -1,7 +1,6 @@
 import { Stack } from 'h3'
-import { IncomingMessage } from 'unenv/runtime/node/http/request'
+import { IncomingMessage as _IncomingMessage } from 'unenv/runtime/node/http/request'
 import { ServerResponse } from 'unenv/runtime/node/http/response'
-import { sortStack } from './sortStack'
 
 export interface WorkerWrapperOptions {
   /** The base path for the app - defaults to '/' */
@@ -10,14 +9,18 @@ export interface WorkerWrapperOptions {
   sortStack?: boolean
 }
 
+export interface IncomingMessage<Body = any> extends _IncomingMessage {
+  body: Body
+}
+
 export interface WorkerApp {
-  (req: IncomingMessage, res: ServerResponse): Promise<any>
+  <Body>(req: IncomingMessage<Body>, res: ServerResponse): Promise<any>
   stack: Stack
   _handle: WorkerPHandle
   use: WorkerAppUse
 }
 
-export type WorerMiddleware = (req: IncomingMessage, res: ServerResponse, next: (err?: Error) => any) => any
+export type WorkerMiddleware<Body = any> = (req: IncomingMessage<Body>, res: ServerResponse, next: (err?: Error) => any) => any
 
 export interface WorkerInputLayer {
   route?: string
@@ -27,20 +30,20 @@ export interface WorkerInputLayer {
   promisify?: boolean
 }
 
-export declare type WorkerLazyHandle = () => WorkerHandle | Promise<WorkerHandle>
+export type WorkerLazyHandle = () => WorkerHandle | Promise<WorkerHandle>
 
-export declare type WorkerMatcher = (url: string, req?: IncomingMessage) => boolean
+export type WorkerMatcher = (url: string, req?: IncomingMessage) => boolean
 
 
 export interface WorkerAppUse {
-  (route: string | string[], handle: WorerMiddleware | WorerMiddleware[], options?: Partial<WorkerInputLayer>): WorkerApp
-  (route: string | string[], handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
-  (handle: WorerMiddleware | WorerMiddleware[], options?: Partial<WorkerInputLayer>): WorkerApp
-  (handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(route: string | string[], handle: WorkerMiddleware<Body> | WorkerMiddleware<Body>[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(route: string | string[], handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(handle: WorkerMiddleware<Body> | WorkerMiddleware<Body>[], options?: Partial<WorkerInputLayer>): WorkerApp
+  <Body>(handle: WorkerHandle | WorkerHandle[], options?: Partial<WorkerInputLayer>): WorkerApp
   (options: WorkerInputLayer): WorkerApp
 }
 
-export type WorkerHandle<T = any> = (req: IncomingMessage, res: ServerResponse) => T
+export type WorkerHandle<T = any> = (req: IncomingMessage<T>, res: ServerResponse) => T
 export type WorkerPHandle = WorkerHandle<Promise<any>>
 
 export { handleEvent } from './handleEvent'
